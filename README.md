@@ -16,7 +16,12 @@ A modern solution to minify CSS/JS in your OpenMage project.
 Features
 ---------
 
-
+- Uses the great matthiasmullie/minify library, with 26+M downloads is the most
+  modern and supported minimization library for PHP
+- Creates `media/fbminify` folder where the minified files are stored
+- Changes to the original files are detected based on the modification timestamp
+  of the files themselves
+- A cron job will clean old copies of the minified files every night at 03:30
 
 Warning
 ---------
@@ -28,6 +33,9 @@ Installation
 
 Only composer installation is supported:
 `composer require fballiano/openmage-cssjs-minify`
+
+Make sure that CSS/JS merging (the one provided by OpenMage core) is disabled
+(it's an old relic of the M1 era and it's not necessary anymore since HTTP2).
 
 Support
 -------

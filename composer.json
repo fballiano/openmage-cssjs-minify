@@ -1,0 +1,26 @@
+{
+  "name": "fballiano/openmage-cssjs-minify",
+  "license": "OSL-3.0",
+  "type": "magento-module",
+  "description": "CSS/JS minify module for OpenMage (and Magento 1.9)",
+  "keywords": [
+    "magento",
+    "magento1",
+    "openmage",
+    "minify"
+  ],
+  "homepage": "https://github.com/fballiano/openmage-cssjs-minify",
+  "require": {
+    "php": ">=7.4.0",
+    "magento-hackathon/magento-composer-installer": "*",
+    "matthiasmullie/minify": "^1.3"
+  },
+  "authors": [
+    {
+      "name": "Fabrizio Balliano",
+      "email": "fabrizio@fabrizioballiano.com",
+      "homepage": "http://fabrizioballiano.com",
+      "role": "Developer"
+    }
+  ]
+}

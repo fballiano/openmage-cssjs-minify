@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Fballiano_CssjsMinify>
+            <version>0.1.0</version>
+        </Fballiano_CssjsMinify>
+    </modules>
+    <global>
+        <models>
+            <fballiano_cssjsminify>
+                <class>Fballiano_CssjsMinify_Model</class>
+            </fballiano_cssjsminify>
+        </models>
+    </global>
+    <frontend>
+        <events>
+            <http_response_send_before>
+                <observers>
+                    <fballiano_cssjsminify>
+                        <class>fballiano_cssjsminify/observer</class>
+                        <method>httpResponseSendBefore</method>
+                    </fballiano_cssjsminify>
+                </observers>
+            </http_response_send_before>
+        </events>
+    </frontend>
+    <crontab>
+        <jobs>
+            <fballiano_cssjsminify>
+                <schedule>
+                    <cron_expr>30 3 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>fballiano_cssjsminify/observer::dailyCron</model>
+                </run>
+            </fballiano_cssjsminify>
+        </jobs>
+    </crontab>
+</config>

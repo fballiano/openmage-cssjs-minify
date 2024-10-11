@@ -13,7 +13,11 @@ class Fballiano_CssjsMinify_Model_Observer
     {
         $response = $observer->getResponse();
         $html = $response->getBody();
-        $baseDir = Mage::getBaseDir();
+        if (defined('MAHO_PUBLIC_DIR')) {
+            $baseDir = MAHO_PUBLIC_DIR;
+        } else {
+            $baseDir = Mage::getBaseDir();
+        }
         $mediaDir = Mage::getBaseDir('media');
         $mediaUrl = Mage::getBaseUrl('media');
         $minifiedDir = "{$mediaDir}/" . self::MINIFIED_FILES_FOLDER . '/';

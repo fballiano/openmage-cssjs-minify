@@ -1,5 +1,5 @@
-CSS/JS Minify module for OpenMage/Magento1
-=============================
+CSS/JS Minify module for Maho, OpenMage and Magento1.
+=====================================================
 
 <table><tr><td align=center>
 <strong>If you find my work valuable, please consider sponsoring</strong><br />
@@ -36,6 +36,11 @@ Only composer installation is supported:
 
 Make sure that CSS/JS merging (the one provided by OpenMage core) is disabled
 (it's an old relic of the M1 era and it's not necessary anymore since HTTP2).
+
+Technical documentation
+-----------------------
+
+Technical documentation is available on [https://deepwiki.com/fballiano/openmage-cssjs-minify](https://deepwiki.com/fballiano/openmage-cssjs-minify).
 
 Support
 -------

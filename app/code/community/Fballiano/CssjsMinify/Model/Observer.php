@@ -9,6 +9,11 @@ class Fballiano_CssjsMinify_Model_Observer
 {
     public const MINIFIED_FILES_FOLDER = 'fbminify';
 
+    private static function isAlreadyMinified(string $filePath): bool
+    {
+        return (bool) preg_match('/[._-](min|pack)\./', $filePath);
+    }
+
     public function httpResponseSendBefore(Varien_Event_Observer $observer): void
     {
         $response = $observer->getResponse();
@@ -37,8 +42,12 @@ class Fballiano_CssjsMinify_Model_Observer
                 $time = filemtime($baseDir . $path);
                 $hash = md5($path) . "-$time.js";
                 if (!file_exists($minifiedDir . $hash)) {
-                    $minifier = new \MatthiasMullie\Minify\JS($baseDir . $path);
-                    $minifier->minify("$minifiedDir/$hash");
+                    if (self::isAlreadyMinified($path)) {
+                        copy($baseDir . $path, $minifiedDir . $hash);
+                    } else {
+                        $minifier = new \MatthiasMullie\Minify\JS($baseDir . $path);
+                        $minifier->minify($minifiedDir . $hash);
+                    }
                 }
                 $matches[2] = $minifiedUrl . $hash;
             }
@@ -55,8 +64,12 @@ class Fballiano_CssjsMinify_Model_Observer
                 $time = filemtime($baseDir . $path);
                 $hash = md5($path) . "-$time.css";
                 if (!file_exists($minifiedDir . $hash)) {
-                    $minifier = new \MatthiasMullie\Minify\CSS($baseDir . $path);
-                    $minifier->minify("$minifiedDir/$hash");
+                    if (self::isAlreadyMinified($path)) {
+                        copy($baseDir . $path, $minifiedDir . $hash);
+                    } else {
+                        $minifier = new \MatthiasMullie\Minify\CSS($baseDir . $path);
+                        $minifier->minify($minifiedDir . $hash);
+                    }
                 }
                 $matches[2] = $minifiedUrl . $hash;
             }

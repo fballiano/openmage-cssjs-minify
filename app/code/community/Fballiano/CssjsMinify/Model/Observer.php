@@ -47,12 +47,15 @@ class Fballiano_CssjsMinify_Model_Observer
                 if (!file_exists($minifiedDir . $hash)) {
                     try {
                         if (self::isAlreadyMinified($path)) {
-                            copy($baseDir . $path, $minifiedDir . $hash);
+                            if (!@copy($baseDir . $path, $minifiedDir . $hash)) {
+                                Mage::log("CssjsMinify: Failed to copy JS {$path}", Zend_Log::ERR);
+                                return $matches[1] . $matches[2] . $matches[3];
+                            }
                         } else {
                             $minifier = new \MatthiasMullie\Minify\JS($baseDir . $path);
                             $minifier->minify($minifiedDir . $hash);
                         }
-                    } catch (\Exception $e) {
+                    } catch (\Throwable $e) {
                         Mage::log("CssjsMinify: Failed to minify JS {$path}: " . $e->getMessage(), Zend_Log::ERR);
                         return $matches[1] . $matches[2] . $matches[3];
                     }
@@ -74,12 +77,15 @@ class Fballiano_CssjsMinify_Model_Observer
                 if (!file_exists($minifiedDir . $hash)) {
                     try {
                         if (self::isAlreadyMinified($path)) {
-                            copy($baseDir . $path, $minifiedDir . $hash);
+                            if (!@copy($baseDir . $path, $minifiedDir . $hash)) {
+                                Mage::log("CssjsMinify: Failed to copy CSS {$path}", Zend_Log::ERR);
+                                return $matches[1] . $matches[2] . $matches[3];
+                            }
                         } else {
                             $minifier = new \MatthiasMullie\Minify\CSS($baseDir . $path);
                             $minifier->minify($minifiedDir . $hash);
                         }
-                    } catch (\Exception $e) {
+                    } catch (\Throwable $e) {
                         Mage::log("CssjsMinify: Failed to minify CSS {$path}: " . $e->getMessage(), Zend_Log::ERR);
                         return $matches[1] . $matches[2] . $matches[3];
                     }
@@ -97,7 +103,16 @@ class Fballiano_CssjsMinify_Model_Observer
         $mediaDir = Mage::getBaseDir('media');
         $minifiedDir = "{$mediaDir}/" . self::MINIFIED_FILES_FOLDER;
 
-        $files = scandir($minifiedDir, SCANDIR_SORT_DESCENDING);
+        if (!is_dir($minifiedDir)) {
+            return;
+        }
+
+        $files = @scandir($minifiedDir, SCANDIR_SORT_DESCENDING);
+        if ($files === false) {
+            Mage::log("CssjsMinify: Failed to scan minified directory: {$minifiedDir}", Zend_Log::ERR);
+            return;
+        }
+
         $lastHash = null;
         foreach ($files as $file) {
             if ($file === '.' || $file === '..') {
@@ -109,7 +124,9 @@ class Fballiano_CssjsMinify_Model_Observer
             $hash = $parts[0];
 
             if ($hash == $lastHash) {
-                unlink("{$minifiedDir}/{$file}");
+                if (!@unlink("{$minifiedDir}/{$file}")) {
+                    Mage::log("CssjsMinify: Failed to delete old minified file: {$file}", Zend_Log::WARN);
+                }
                 continue;
             }
 
